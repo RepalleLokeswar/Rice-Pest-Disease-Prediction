@@ -1,4 +1,4 @@
-#Rice Disease and Pest Prediction
+Rice Disease and Pest Prediction
 
 Overview
 
