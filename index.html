@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rice Disease Prediction</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for enhanced typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        .bg-gradient-agri {
+            background: linear-gradient(135deg, #1a4731, #4a7043);
+        }
+        .bg-hero {
+            background-image: url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation Bar -->
+    <nav class="bg-gradient-agri text-white fixed w-full top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-3xl font-bold">PaddyCare</h1>
+            <ul class="flex space-x-8">
+                <li><a href="#home" class="hover:text-yellow-300 transition duration-300 text-lg">Home</a></li>
+                <li><a href="#about" class="hover:text-yellow-300 transition duration-300 text-lg">About</a></li>
+                <li><a href="#contact" class="hover:text-yellow-300 transition duration-300 text-lg">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center bg-hero">
+        <div class="text-center text-white bg-black bg-opacity-60 p-12 rounded-xl max-w-2xl fade-in">
+            <h2 class="text-5xl font-bold mb-6">Welcome to Rice Disease Prdediction</h2>
+            <p class="text-xl mb-8">Upload an image of your rice crop to detect diseases and pests instantly with our AI-powered system.</p>
+            <form method="POST" enctype="multipart/form-data" class="flex flex-col items-center space-y-4">
+                <input type="file" name="file" accept=".jpg,.jpeg,.png" class="p-3 bg-white text-gray-800 rounded-lg shadow-md w-full max-w-md">
+                <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold py-3 px-8 rounded-full transition duration-300">Diagnose Now</button>
+            </form>
+            {% if error %}
+                <p class="text-red-400 mt-4 font-semibold">{{ error }}</p>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Result Section -->
+    <section id="result" class="py-24 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center text-gray-800 mb-10 fade-in">Diagnosis Results</h2>
+            <div class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-lg fade-in">
+                {% if prediction %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            {% if image_data %}
+                                <img src="data:image/png;base64,{{ image_data }}" alt="Uploaded Image" class="w-full h-auto rounded-lg shadow-md mb-4">
+                            {% endif %}
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-semibold text-gray-800 mb-4">Detected: <span class="text-red-600">{{ prediction }} ({{ confidence|round(2) }}%)</span></h3>
+                            <h4 class="text-xl font-semibold text-gray-800 mb-2">Description</h4>
+                            <p class="text-lg text-gray-600 mb-4">{{ description }}</p>
+                            <h4 class="text-xl font-semibold text-gray-800 mb-2">Precautions</h4>
+                            <ul class="list-disc list-inside text-gray-600 space-y-2">
+                                {% for precaution in precautions %}
+                                    <li>{{ precaution.strip() }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% else %}
+                    <p class="text-lg text-gray-600 text-center">Upload an image to see the diagnosis results.</p>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center text-gray-800 mb-10 fade-in">About RiceGuard</h2>
+            <div class="max-w-3xl mx-auto text-center">
+                <p class="text-lg text-gray-600 mb-6">
+                    RiceGuard is dedicated to empowering farmers with advanced AI technology to safeguard rice crops. Our system uses deep learning to identify diseases and pests from images, providing accurate diagnoses and practical solutions to enhance crop health.
+                </p>
+                <p class="text-lg text-gray-600">
+                    Built with cutting-edge machine learning, RiceGuard analyzes leaf images to detect issues like bacterial leaf blight, brown spot, and pest infestations, helping farmers take timely action.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 bg-gradient-agri text-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-10 fade-in">Get in Touch</h2>
+            <div class="max-w-lg mx-auto text-center">
+                <p class="text-lg mb-6">Have questions or need assistance? Contact our team for support!</p>
+                <p class="text-lg mb-4">Email: <a href="mailto:support@paddycare.com" class="underline hover:text-yellow-300 transition duration-300">support@paddycare.com</a></p>
+                <p class="text-lg">Phone: +1-123-456-7890</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto px-4 text-center">
+            <p>© 2025 PaddyCare. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Animation on Scroll -->
+    <script>
+        // Add fade-in effect when scrolling to sections
+        document.addEventListener('DOMContentLoaded', () => {
+            const elements = document.querySelectorAll('.fade-in');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('opacity-100', 'translate-y-0');
+                    }
+                });
+            }, { threshold: 0.2 });
+            elements.forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+</html>
