@@ -1,0 +1,5 @@
+datasetfordp/
+__pycache__/
+*.pyc
+.vscode/
+dpproject/Rice_leaf_disease_detection.h5
