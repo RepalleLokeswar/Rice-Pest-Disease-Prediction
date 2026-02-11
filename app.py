@@ -11,9 +11,9 @@ app = Flask(__name__)
 
      # Set paths
 working_dir = os.path.dirname(os.path.abspath(__file__))
-model_path = r"C:\Users\chand\Music\DP project\dpproject\Rice_leaf_disease_detection.h5"
-csv_path = r"C:\Users\chand\Music\DP project\dpproject\description.csv"
-json_path = r"C:\Users\chand\Music\DP project\dpproject\class_indices.json"
+model_path = os.path.join(working_dir, 'dpproject', 'Rice_leaf_disease_detection.h5')
+csv_path = os.path.join(working_dir, 'dpproject', 'description.csv')
+json_path = os.path.join(working_dir, 'dpproject', 'class_indices.json')
 
      # Validate file paths
 if not os.path.exists(model_path):
